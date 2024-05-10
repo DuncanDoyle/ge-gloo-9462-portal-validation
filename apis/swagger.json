@@ -1,0 +1,1499 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Test Organization Service",
+    "description": "A sample API",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/org/{organizationId}": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieve specified org by OrgId",
+        "description": "Retrieve org specified by OrgId",
+        "operationId": "findOrgById",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "The Test created unique numeric identifier for the Organization",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/{organizationId}/parents": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieves parents of specified org",
+        "description": "Retrieves parents of specified org, either immediate or the full hierarchy based on options.Filter allows specification of the hierarchy to traverse.\n\nIf the fullTree option is supplied, then the entire hierachy of parents is returned. Otherwise, only the immediate parent of the org is returned",
+        "operationId": "findOrgParents",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "The Test created unique numeric identifier for the Organization",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Hierarchy Lookup filters.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [relType,orgStatus]\n\n relType is required. It will fill in by default, but when passing orgStatus, relType must also be supplied",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "relType::BOPC"
+              ]
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "description": "Hierarchy Lookup options.\n\nFormat: \"option1,option2\"\n\nValid Fields: [fullTree] ",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/{organizationId}/children": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieves children of specified org",
+        "description": "Retrieves children of specified org, either immediate or the full hierarchy based on options.Filter allows specification of the hierarchy to traverse and whether to filter by childType. \n\nWhen filtering by childType, if the fullTree option is not specified, then only immediate children of that type are returned. If fullTree is supplied, then the entire hierarchy will be searched for children of that type, and their related trees returned.",
+        "operationId": "findOrgChildren",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "The Test created unique numeric identifier for the Organization",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Hierarchy Lookup filters.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [relType,childType,orgStatus]\n\n relType is required. It will fill in by default, but when passing childType or orgStatus, relType must also be supplied",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "relType::BOPC"
+              ]
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which fields to use to sort the response.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [orgId,orgAbbr,orgType]\n\ne.g. orgId::asc,orgAbbr::desc",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "description": "Hierarchy Lookup options.\n\nFormat: \"option1,option2\"\n\nValid Fields: [fullTree] ",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/{organizationAbbr}": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieve specified org by abbreviation and type",
+        "description": "Retrieves org specified by abbreviation and type. Abbreviations are unique within any given type.",
+        "operationId": "findOrgByOrgAbbr",
+        "parameters": [
+          {
+            "name": "organizationAbbr",
+            "in": "path",
+            "description": "A formatted string containing the abbreviation (3-5 letters) for the Organization, combined with the type of org being retrieved.\n\nFormat: \"OrgTypeCode-orgAbbr\"",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/{organizationAbbr}/parents": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieves parents of specified org",
+        "description": "Retrieves parents of specified org, either immediate or the full hierarchy based on options.Filter allows specification of the hierarchy to traverse.\n\nIf the fullTree option is supplied, then the entire hierachy of parents is returned. Otherwise, only the immediate parent of the org is returned",
+        "operationId": "findOrgAbbrParents",
+        "parameters": [
+          {
+            "name": "organizationAbbr",
+            "in": "path",
+            "description": "A formatted string containing the abbreviation (3-5 letters) for the Organization, combined with the type of org being retrieved.\n\nFormat: \"OrgTypeCode-orgAbbr\"",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Hierarchy Lookup filters.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [relType,orgStatus]\n\n relType is required. It will fill in by default, but when passing orgStatus, relType must also be supplied",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "relType::BOPC"
+              ]
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "description": "Hierarchy Lookup options.\n\nFormat: \"option1,option2\"\n\nValid Fields: [fullTree] ",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/{organizationAbbr}/children": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieves children of specified org",
+        "description": "Retrieves children of specified org, either immediate or the full hierarchy based on options.Filter allows specification of the hierarchy to traverse and whether to filter by childType.\n\nWhen filtering by childType, if the fullTree option is not specified, then only immediate children of that type are returned. If fullTree is supplied, then the entire hierarchy will be searched for children of that type, and their related trees returned.",
+        "operationId": "findOrgAbbrChildren",
+        "parameters": [
+          {
+            "name": "organizationAbbr",
+            "in": "path",
+            "description": "A formatted string containing the abbreviation (3-5 letters) for the Organization, combined with the type of org being retrieved.\n\nFormat: \"OrgTypeCode-orgAbbr\"",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Hierarchy Lookup filters.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [relType,childType,orgStatus]\n\n relType is required. It will fill in by default, but when passing childType or orgStatus, relType must also be supplied",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "relType::BOPC"
+              ]
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which fields to use to sort the response.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [orgId,orgAbbr,orgType]\n\ne.g. orgId::asc,orgAbbr::desc",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "options",
+            "in": "query",
+            "description": "Hierarchy Lookup options.\n\nFormat: \"option1,option2\"\n\nValid Fields: [fullTree]",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/org/organizations": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieves list of organizations",
+        "description": "Retrieves list of organizations based on input types and organization information. It is only valid to specify one of the valid filter options, but multiple of that unique option may be supplied.",
+        "operationId": "findOrgByOrgTypes",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Search Information, select either based on getting all orgs for a given type, or specify org type and abbreviation pairs. Can only specify one of the 2 main options, but can specify multiple of each filter item in the query.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [orgType,orgAbbr,orgStatus]\n\n Format of orgAbbr: \"OrgTypeCode-orgAbbreviation\"\n\ne.g. orgAbbr::S-BBP,orgAbbr::E-RGV or orgType::E\n\norgStatus will only be applied if the orgType option is used. Otherwise this option doesn't apply since the orgAbbr option is to get back specific orgs.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which fields to use to sort the response.\n\nFormat: \"field1::value1,field2::value2\"\n\nValid Fields: [orgId,orgAbbr,orgType]\n\ne.g. orgId::asc,orgAbbr::desc",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/externalorg/{systemName}/{orgName}": {
+      "get": {
+        "tags": [
+          "Test Organization api"
+        ],
+        "summary": "Retrieve org based on the external system org name",
+        "description": "Retrieve specified org by external OrgName.",
+        "operationId": "findOrgByExternalName",
+        "parameters": [
+          {
+            "name": "systemName",
+            "in": "path",
+            "description": "The name of the external system that supplied the name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orgName",
+            "in": "path",
+            "description": "The name of the organization in the external system",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/aor": {
+      "get": {
+        "tags": [
+          "Test Area Of Responsibility (AOR) api"
+        ],
+        "summary": "Retrieve aors",
+        "description": "Multiple parameters can be provided. Use filter, sort and page.",
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Fields: [aorName (supports contains), orgId, aorTypeCode, aorClassCode]\n\nFormat \"field1::value1,field2::value2\" e.g. \"aorName::SA\"​",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Fields: [aorId, aorName (default asc), orgAbbr] e.g.\"aorName::desc,orgAbbr::asc\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Format  \"num::1,size::10\", default paging num:1 and size:20",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "aorSet",
+            "in": "query",
+            "description": "Fields: [fiscalYear , fiscalYearRevision]\n\nFormat \"fiscalYear::value1,fiscalYearRevision::value2\"\n\n e.g. \"fiscalYear::2022,fiscalYearRevision::1​\"",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AOR"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/aor/{aorId}": {
+      "get": {
+        "tags": [
+          "Test Area Of Responsibility (AOR) api"
+        ],
+        "summary": "Retrieve the details for the aor",
+        "description": "Returns a single area of responsibility",
+        "operationId": "getAorById",
+        "parameters": [
+          {
+            "name": "aorId",
+            "in": "path",
+            "description": "aor id of area of responsibility to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AOR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/aor/{aorId}/children": {
+      "get": {
+        "tags": [
+          "Test Area Of Responsibility (AOR) api"
+        ],
+        "summary": "Retrieve the details of an aor children",
+        "description": "Returns area of responsibility children such as subdivisions of a sector aor",
+        "operationId": "findChildrenByAorId",
+        "parameters": [
+          {
+            "name": "aorId",
+            "in": "path",
+            "description": "aor id of area of responsibility to return aor children",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request - Request malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Method not supported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK - Request successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AOR"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error - Request processing failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Request refused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported media type - Content type not recognized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "integer",
+            "description": "Unique Numeric ID of an Organization",
+            "format": "int32",
+            "example": 809
+          },
+          "orgAbbr": {
+            "type": "string",
+            "description": "Organization abbreviation",
+            "example": "BBT"
+          },
+          "orgName": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "TEST ORG"
+          },
+          "orgType": {
+            "type": "string",
+            "description": "Organization type, from lookup table",
+            "example": "E"
+          },
+          "orgDescription": {
+            "type": "string",
+            "description": "Organization description",
+            "example": "Test org"
+          },
+          "status": {
+            "type": "string",
+            "description": "Organization status, 'A' or 'I'",
+            "example": "A"
+          },
+          "fingerprintOriNbr": {
+            "type": "string",
+            "description": "Test Number",
+            "example": "TXAAA111"
+          },
+          "arsLocAtNear": {
+            "type": "string",
+            "description": "Nearby location",
+            "example": "Dallas, Texas"
+          },
+          "gmtOffset": {
+            "type": "integer",
+            "description": "Timezone offset from GMT for this Org",
+            "format": "int32"
+          },
+          "organizations": {
+            "type": "array",
+            "description": "Child Organizations",
+            "items": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createBy": {
+            "type": "string",
+            "readOnly": true,
+            "example": "UPN"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateBy": {
+            "type": "string",
+            "readOnly": true,
+            "example": "UPN"
+          }
+        }
+      },
+      "AOR": {
+        "required": [
+          "aorName"
+        ],
+        "type": "object",
+        "properties": {
+          "aorId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "aorName": {
+            "type": "string",
+            "example": "Big Bend"
+          },
+          "aorDescription": {
+            "type": "string",
+            "example": "Big Bend Sector"
+          },
+          "areaSqMi": {
+            "type": "number",
+            "description": "The size of the AOR in Square Miles",
+            "format": "double",
+            "example": 250
+          },
+          "orgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fiscalYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fiscalYearRevision": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "zoneId": {
+            "type": "string"
+          },
+          "aorType": {
+            "$ref": "#/components/schemas/AOR Type Code"
+          },
+          "aorClass": {
+            "$ref": "#/components/schemas/AOR Class Code"
+          },
+          "aorSet": {
+            "$ref": "#/components/schemas/AOR Set"
+          },
+          "org": {
+            "$ref": "#/components/schemas/AOR Org Info"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "createBy": {
+            "type": "string",
+            "readOnly": true,
+            "example": "UPN"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updateBy": {
+            "type": "string",
+            "readOnly": true,
+            "example": "UPN"
+          }
+        }
+      },
+      "AOR Class Code": {
+        "required": [
+          "aorClassCode"
+        ],
+        "type": "object",
+        "properties": {
+          "aorClassCode": {
+            "type": "string",
+            "example": "BPC"
+          },
+          "aorClassText": {
+            "type": "string",
+            "example": "TEST Class"
+          },
+          "aorClassDescription": {
+            "type": "string",
+            "example": "TEST Class Description"
+          }
+        },
+        "description": "AOR Class"
+      },
+      "AOR Org Info": {
+        "required": [
+          "orgId"
+        ],
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 809
+          },
+          "orgAbbr": {
+            "type": "string",
+            "example": "BBT"
+          },
+          "orgName": {
+            "type": "string",
+            "example": "TEST ORG"
+          }
+        }
+      },
+      "AOR Set": {
+        "required": [
+          "aorSetId"
+        ],
+        "type": "object",
+        "properties": {
+          "aorSetId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "fiscalYear": {
+            "type": "integer",
+            "format": "int32",
+            "example": 2022
+          },
+          "fiscalYearRevision": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "Revision data for AOR, broken down by fiscal year"
+      },
+      "AOR Type Code": {
+        "required": [
+          "aorTypeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "aorTypeCode": {
+            "type": "string",
+            "example": "E"
+          },
+          "aorTypeText": {
+            "type": "string",
+            "example": "SECTOR"
+          },
+          "aorTypeDescription": {
+            "type": "string",
+            "example": "SECTOR DESCRIPTION"
+          }
+        },
+        "description": "AOR Type"
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+apiVersion: portal.gloo.solo.io/v1beta1
+kind: Environment
+metadata:
+  name: test-environment
+  namespace: gloo-portal
+spec:
+  displayInfo:
+    displayName: test-environment
+  domains:
+  - api.example.com
+  gatewayConfig: {}
+  # parameters:
+  #   usagePlans:
+  #     basic:
+  #       displayName: Basic plan with API key auth
+  #       authPolicy:
+  #         apiKey: { }
+  #       rateLimit:
+  #         requestsPerUnit: 5
+  #         unit: MINUTE
+  #     gold:
+  #       displayName: Gold plan with API key auth
+  #       authPolicy:
+  #         apiKey: { }
+  #       rateLimit:
+  #         requestsPerUnit: 50
+  #         unit: MINUTE 
+  #     ultimate:
+  #       displayName: Ultimate plan with API key auth
+  #       authPolicy:
+  #         apiKey: { }
+  #       rateLimit:
+  #         requestsPerUnit: 500
+  #         unit: MINUTE
+  apiProducts:
+  - namespaces:
+    - "*" 
+    labels:
+    - key: app
+      operator: Equals
+      values:
+      - test
+    # basePath: /petstore
+    versions:
+      tags:
+      - stable
+    # usagePlans:
+    # - basic
+    # - gold
+    # - ultimate

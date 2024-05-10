@@ -1,0 +1,12 @@
+apiVersion: portal.gloo.solo.io/v1beta1
+kind: APIDoc
+metadata:
+  name: test-api
+  namespace: gloo-portal
+spec:
+  openApi:
+    content:
+      configMap:
+        key: api-doc-spec
+        name: gloo-portal-test-api-api-doc-spec
+        namespace: gloo-portal

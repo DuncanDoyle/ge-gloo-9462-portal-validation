@@ -1,0 +1,29 @@
+gloo:
+  settings:
+    disableKubernetesDestinations: true
+  gloo:
+    logLevel: warn
+  discovery:
+    enabled: true
+  gateway:
+    # ddoyle: enabled for debugging purposes to be able to see the Proxy CR. Has performance impact, so don't enable in production environments.
+    persistProxySpec: true
+    validation:
+      # ddoyle: Initially set this to "true" to allow the VirtualService (with warnings) to be created. 
+      allowWarnings: true
+      alwaysAcceptResources: false
+      disableTransformationValidation: false
+      warnRouteShortCircuiting: true
+  gatewayProxies:      
+    gatewayProxy:
+      disabled: false
+      readConfig: true
+      readConfigMulticluster: true
+      envoyLogLevel: warn
+      gatewaySettings:
+        accessLoggingService:
+          accessLog:
+          - fileSink:
+              path: /dev/stdout
+              stringFormat: ""
+  

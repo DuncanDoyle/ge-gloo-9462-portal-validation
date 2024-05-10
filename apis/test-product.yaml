@@ -1,0 +1,27 @@
+apiVersion: portal.gloo.solo.io/v1beta1
+kind: APIProduct
+metadata:
+  name: test-product
+  namespace: gloo-portal
+  labels:
+    app: test
+spec:
+  displayInfo:
+    title: test-product
+  versions:
+  - name: "1.0"
+    apis:
+    - apiDoc:
+        name: test-api
+        namespace: gloo-portal
+      openApi: {}
+    gatewayConfig:
+      route:
+        inlineRoute:
+          backends:
+          - upstream:
+              name: default-httpbin-8000
+              namespace: gloo-system
+    tags:
+      stable: {}
+    

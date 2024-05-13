@@ -17,16 +17,14 @@ printf "\nInstalling API Products ...\n"
 kubectl apply -f apis/test-product.yaml
 printf "\n"
 
-printf "\nInstalling Portal Environment ...\n"
-kubectl apply -f environment/test-environment.yaml
+printf "\nInstalling Portal ...\n"
+kubectl apply -f portal/test-portal-portal.yaml
 printf "\n"
 
-# printf "\Installing Users and Groups ...\n"
-# kubectl apply -f users-groups/developers-group-users-secret.yaml
-# printf "\n"
+sleep 2
 
-printf "\Installing Portal ...\n"
-kubectl apply -f portal/test-portal-portal.yaml
+printf "\nInstalling Portal Environment ...\n"
+kubectl apply -f environment/test-environment.yaml
 printf "\n"
  
 popd
